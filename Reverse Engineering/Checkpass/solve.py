@@ -63,6 +63,7 @@ targets = {
     28: 0xf9, 13: 0x20, 17: 0x7b, 2: 0x50, 9: 0xcb, 4: 0xb8, 24: 0xcf, 18: 0x7b
 }
 
+
 for idx, val in targets.items():
     solver.add(state[idx] == val)
 
