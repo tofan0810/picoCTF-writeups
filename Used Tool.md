@@ -77,3 +77,50 @@ valgrind --tool=cachegrind ./ten_file_binary <doi_so>
 
 # Xem báo cáo chi tiết về lỗi bộ nhớ
 valgrind --leak-check=full ./ten_file_binary
+```
+## 8. Radare2 (r2)
+
+* **Định nghĩa:** Là một khung làm việc (framework) mã nguồn mở cực kỳ mạnh mẽ cho việc dịch ngược và phân tích mã máy thông qua dòng lệnh.
+* **Áp dụng:** Tương tự như Ghidra nhưng hoạt động hoàn toàn trên terminal. Radare2 rất nhẹ, nhanh và hỗ trợ script hóa tốt. Nó thường được dùng để phân tích nhanh cấu trúc file, tìm kiếm chuỗi (strings), hoặc patch (sửa đổi) file binary trực tiếp.
+* **Cách sử dụng:**
+
+```bash
+    r2 ./file_binary       # Mở file
+    (r2) aaa               # Tự động phân tích toàn bộ (analyze all)
+    (r2) afl               # Liệt kê tất cả các hàm (analyze functions list)
+    (r2) pdf @main         # In mã máy của hàm main (print disassembly function)
+    (r2) vv                # Mở giao diện đồ họa dạng khối (Visual Mode)
+
+```
+
+## 9. Z3-Solver
+
+* **Định nghĩa:** Là một công cụ giải các định lý (Theorem Prover) hiệu năng cao được phát triển bởi Microsoft Research.
+* **Áp dụng:** Trong CTF, Z3 là "vũ khí hạng nặng" cho các bài Reversing hoặc Crypto có hệ phương trình phức tạp. Khi bạn tìm thấy logic kiểm tra flag (ví dụ: `flag[0] * 2 + flag[1] == 150`), thay vì giải tay, bạn chỉ cần mô tả các điều kiện cho Z3 và nó sẽ tự tìm ra giá trị của flag.
+* **Cách sử dụng (Trong Python script):**
+
+```python
+    from z3 import *
+    s = Solver()
+    x = Int('x')
+    y = Int('y')
+    s.add(x + y == 10, x > 2, y < 5) # Thêm các điều kiện
+    if s.check() == sat:            # Kiểm tra xem có nghiệm không
+        print(s.model())            # In ra kết quả
+
+```
+
+## 10. Wireshark & Tshark
+
+* **Định nghĩa:** Wireshark là công cụ phân tích giao thức mạng (Packet Sniffer) phổ biến nhất thế giới. Tshark là phiên bản dòng lệnh của Wireshark.
+* **Áp dụng:** Dùng trong mảng **Forensics** và **Network**. Giúp trích xuất dữ liệu từ các file lưu lượng mạng (`.pcap`, `.pcapng`), theo dõi các luồng TCP/HTTP để tìm flag bị rò rỉ hoặc khôi phục các file được truyền tải qua mạng (như ảnh, zip, script).
+* **Cách sử dụng:**
+* **Wireshark:** Gõ `wireshark file.pcap` để mở giao diện GUI, sau đó dùng các bộ lọc như `http`, `tcp.stream eq 5`, hoặc `dns`.
+* **Tshark:** Dùng để trích xuất nhanh dữ liệu mà không cần mở GUI.
+
+
+
+```bash
+    # Trích xuất tất cả các giá trị của một trường cụ thể trong file pcap
+    tshark -r file.pcap -T fields -e http.user_agent
+```
