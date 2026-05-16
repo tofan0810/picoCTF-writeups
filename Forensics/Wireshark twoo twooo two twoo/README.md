@@ -5,6 +5,7 @@ shark1.pcapng
 
 # Giải
 - Đầu tiên dùng statistic (di xuống mục http->requests trong statistics), ta thấy /flag và / trong địa chỉ 18.217.1.57 
+
 ![statistics](statistic.png)
 - Dùng strings:
 ```
@@ -18,13 +19,14 @@ picoCTF{711d3893d90f100c15e10ef4842abeed3a830f8237c1257cd47389646da97810}
 ```
 - Ta thấy toàn là fake flag
 - filter dns thì thấy rất nhiều dns request đến {sub-domain}.reddshrimpandherring.com
-
+![Filter dns](filter%20dns.png)
 - Nhìn vào thì maybe máy chủ nạn nhân là 192.168.38.104
 - Tiếp tục filter http and ip.addr==18.217.1.57 and follow http stream
-
+![ip.addr==18.217.1.57](http%20and%20ip.addr==18.217.1.57.png)
+![Follow HTTP Stream](follow%20http%20stream.png)
 * Có vẻ là địa chỉ 18.217.1.57 là 1 gợi ý gì đó
 - Filter dns and ip.dst==18.217.1.57
-
+![Filter dns and ip.dst==18.217.1.57](dns%20and%20ip.dst==18.217.1.57.png)
 * Ta thấy cái sub-domain là một chuỗi base64 -> nối chúng =>Flag
 ```
 ┌──(kali㉿kali)-[/mnt/hgfs/picoCTF-writeups/Forensics/Wireshark twoo twooo two twoo]
