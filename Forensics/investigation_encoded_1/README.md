@@ -272,7 +272,7 @@ Nhìn vào cửa sổ **Listing** ở giữa hình ảnh của bạn, ta thấy 
            00102020 b8              undefined1B8h                     [0]                               XREF[2]:     getValue:0010130a(*), 
                                                                                                                      getValue:00101311(*)  
 ```
-- **Kết luận** : địa chỉ mảng secret như ta thấy bắt đầu tại 00102020 -> bây giờ viết script tự động đọc trực tiếp mảng secret và matrix sau đó dịch ngược file output 
+- **Kết luận** : địa chỉ mảng secret như ta thấy bắt đầu tại 00102020 -> bây giờ viết script tự động đọc trực tiếp mảng secret và matrix từ pwntools sau đó dịch ngược file output 
 - Chạy solve.py =>FLAG
 
 # Note
