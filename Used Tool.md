@@ -249,4 +249,34 @@ icat -o <offset_phan_vung> -s image_o_cung.dd 1425 > slack_data.txt
 3. Lựa chọn các mô-đun phân tích tự động (Ingest Modules) như: *File Type Identification*, *Keyword Search*, *Deleted Files Recovery*.
 4. Duyệt cây thư mục bên trái để kiểm tra kết quả, bấm vào tab `Slack Space` ở khung xem dữ liệu phía dưới để kiểm tra các byte dữ liệu ẩn giấu cuối Cluster của file.
 
-viết tiếp tool sstv
+---
+
+## 18. SSTV (Python Library / Command-line Tool)
+
+* **Định nghĩa:** Là một công cụ và thư viện mã nguồn mở viết bằng Python, chuyên dụng để giải mã tín hiệu truyền hình quét chậm (**SSTV - Slow Scan Television**) trực tiếp từ dòng lệnh mà không cần giao diện đồ họa hay cấu hình driver âm thanh phức tạp.
+* **Áp dụng:** Phục vụ cho mảng **Forensics**, **Audio**, hoặc **Steganography**. Khi đề bài CTF cung cấp một file âm thanh (`.wav`) chứa các tiếng rít và "bíp" rè rè đặc trưng của tín hiệu SSTV, công cụ này giúp bạn ngay lập tức trích xuất ra file ảnh chứa Flag chỉ bằng một dòng lệnh duy nhất, hỗ trợ tự động nhận diện hầu hết các chế độ mã hóa phổ biến (như Robot, Scottie, Martin).
+* **Cách sử dụng đầy đủ:**
+
+```bash
+# 2. Giải mã cơ bản (Tự động nhận diện Mode và xuất ra file ảnh)
+sstv -d file_tin_hieu.wav -o flag_khoi_phuc.png
+
+# 3. Ép kiểu chế độ mã hóa (Chỉ định rõ Mode khi tính năng tự động nhận diện thất bại)
+# Các chế độ phổ biến: MartinM1, MartinM2, ScottieS1, ScottieS2, Robot36, Robot72...
+sstv -d file_tin_hieu.wav -o flag.png --mode ScottieS1
+
+# 4. Sửa ảnh bị méo/lệch (Tùy chỉnh tần số lấy mẫu - Sampling Rate)
+# Đôi khi file âm thanh CTF bị bóp méo tần số khiến ảnh xuất ra bị sọc nghiêng.
+# Bạn có thể dùng tham số --rate để ép xung tần số lấy mẫu (mặc định thường là 11025, 22050 hoặc 44100)
+sstv -d file_tin_hieu.wav -o flag_thang.png --rate 22050
+
+# 5. Bỏ qua tín hiệu mồi (Strict Verification Bypass)
+# Mặc định sstv sẽ tìm kiếm chuỗi tín hiệu "mồi" (calibration header) ở đầu file để bắt đầu dịch.
+# Nếu tác giả CTF cắt mất đoạn đầu này, hãy ép công cụ chạy bằng cách bỏ qua kiểm tra:
+sstv -d file_bi_cat.wav -o flag.png --no-header
+
+# 6. Xem danh sách tất cả các chế độ mã hóa (SSTV Modes) mà công cụ hỗ trợ
+sstv --list-modes
+```
+
+> **Mẹo nâng cao cho giải CTF:** Nếu file `.wav` của đề bài có quá nhiều tạp âm (noise) khiến công cụ `sstv` không thể đọc được và trả về lỗi, hãy dùng phần mềm **Audacity** (hoặc lệnh `sox`) trên Kali để lọc nhiễu (Noise Reduction), chuẩn hóa âm lượng (Normalize) về mức `-1dB`, sau đó chạy lại lệnh `sstv` ở trên để lấy ảnh rõ nét nhất.
